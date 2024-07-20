@@ -1,0 +1,6 @@
+@AmegaPriceQueryAPI_HostAddress = http://localhost:5048
+
+GET {{AmegaPriceQueryAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
