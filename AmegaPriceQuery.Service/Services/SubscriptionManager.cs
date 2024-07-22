@@ -7,12 +7,11 @@ namespace AmegaPriceQuery.Service.Services;
 public class SubscriptionManager : IPriceChannel
 {
     private readonly ILogger<SubscriptionManager> _logger;
-    //private readonly object _lock = new object();
     private readonly IDataSource _dataSource;
     private readonly IPriceUtility _priceUtility;
     public event Action<string, decimal>? BroadcastPriceEvent;
 
-    private SubscriptionManager(IDataSource dataSource, IPriceUtility priceUtility, ILogger<SubscriptionManager> logger)
+    public SubscriptionManager(IDataSource dataSource, IPriceUtility priceUtility, ILogger<SubscriptionManager> logger)
     {
         _dataSource = dataSource;
         _logger = logger;
@@ -20,13 +19,7 @@ public class SubscriptionManager : IPriceChannel
         _priceUtility = priceUtility;
         _dataSource.OnMessageReceived += ReceivePriceFromSource;
     }
-
-    public static SubscriptionManager CreateInstance(IDataSource dataSource, IPriceUtility priceUtility, ILogger<SubscriptionManager> logger)
-    {
-        return new SubscriptionManager(dataSource, priceUtility, logger);
-    }
-
-
+    
     public ConcurrentDictionary<string, int> subscriptions { get; }
 
     public async Task SubscribeAsync(string instrument)
@@ -34,17 +27,21 @@ public class SubscriptionManager : IPriceChannel
         instrument = instrument.ToLower();
         if (subscriptions.ContainsKey(instrument))
         {
+            // Increment the subscription count for the instrument
             subscriptions[instrument]++;
+            _logger.LogInformation("Incremented subscription count for {Instrument}.", instrument);
         }
         else
         {
             await _dataSource.ConnectToSocketAsync();
+            _logger.LogInformation("Connected to WebSocket for subscribing to {Instrument}.", instrument);
+
             // Start receiving messages in the background
             _ = Task.Run((Func<Task>)(async () => await _dataSource.ReceiveMessageFromSocket(new CancellationTokenSource().Token)));
 
             await _dataSource.BeginPriceDataStreamingAsync(instrument);
-            
             subscriptions.TryAdd(instrument, 1);
+            _logger.LogInformation("Subscribed to {Instrument}.", instrument);
         }
     }
 
@@ -54,20 +51,19 @@ public class SubscriptionManager : IPriceChannel
         if (subscriptions.ContainsKey(instrument))
         {
             subscriptions[instrument]--;
+            _logger.LogInformation("Decremented subscription count for {Instrument}.", instrument);
             if (subscriptions[instrument] == 0)
             {
                 subscriptions.TryRemove(instrument, out _);
                 await _dataSource.StopPriceDataStreamingAsync(instrument);
+                _logger.LogInformation("Unsubscribed from {Instrument}.", instrument);
             }
         }
-        else
-        {
-            return;
-        }
-        
+
         if (subscriptions.IsEmpty)
         {
             await _dataSource.DisconnectFromSocketAsync();
+            _logger.LogInformation("Disconnected from WebSocket as there are no active subscriptions.");
         }
     }
 
@@ -77,11 +73,12 @@ public class SubscriptionManager : IPriceChannel
         _priceUtility.UpdatePrice(response.Item1, response.Item2);
         BroadcastPrice(response.Item1, response.Item2);
     }
+
     public void BroadcastPrice(string instrument, decimal price)
     {
         BroadcastPriceEvent?.Invoke(instrument, price);
+        _logger.LogInformation("Broadcasted price update for {Instrument}: {Price}.", instrument, price);
     }
-
 
     Tuple<string, decimal> ParsePrice(string message)
     {
@@ -92,6 +89,7 @@ public class SubscriptionManager : IPriceChannel
             // Ensure the message is a trade update
             if (json["e"]?.ToString() != "aggTrade")
             {
+                _logger.LogWarning("Received non-trade message: {Message}.", message);
                 return new Tuple<string, decimal>("error", 0);
             }
 
@@ -106,5 +104,4 @@ public class SubscriptionManager : IPriceChannel
             return new Tuple<string, decimal>("error", 0);
         }
     }
-
 }
