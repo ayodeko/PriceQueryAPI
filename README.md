@@ -18,27 +18,6 @@ and expose the prices to clients through WebSockets and REST APIs.
 - [Management of WebSocket over 1000 Subscribers](#management-of-websocket-over-1000-subscribers)
 - [Contact](#contact)
 
-## Project Specifications
-
-- **.NET Version**: .NET 8
-- **Core Features**:
-  - Real-time price updates via WebSocket
-  - REST API for fetching instruments and prices
-  - SignalR for WebSocket communication
-
-## Design Patterns Used 
-
-- **Dependency Injection**: Achieved using built-in .NET Core DI.
-- **Singleton Pattern**: Used in service registrations for single-instance services.
-- **Observer Pattern**: Implemented with events for real-time updates.
-
-## Frameworks and Tools
-
-- **ASP.NET Core**: For building the web API.
-- **xUnit**: For unit testing.
-- **SignalR**: For WebSocket communication.
-- **Swagger**: For API documentation.
-- **Newtonsoft.Json**: For JSON serialization and deserialization.
 
 ## Getting Started
 
@@ -128,7 +107,27 @@ SignalR is chosen for WebSocket communication due to its scalability features. I
 
 Refer to the code comments in `SubscriptionManager.cs` for more details.
 
+## Project Specifications
 
+- **.NET Version**: .NET 8
+- **Core Features**:
+  - Real-time price updates via WebSocket
+  - REST API for fetching instruments and prices
+  - SignalR for WebSocket communication
+
+## Design Patterns Used 
+
+- **Dependency Injection**: Achieved using built-in .NET Core DI.
+- **Singleton Pattern**: Used in service registrations for single-instance services.
+- **Observer Pattern**: Implemented with events for real-time updates.
+
+## Frameworks and Tools
+
+- **ASP.NET Core**: For building the web API.
+- **xUnit**: For unit testing.
+- **SignalR**: For WebSocket communication.
+- **Swagger**: For API documentation.
+- 
 ## Contact   
 ✉️
 
