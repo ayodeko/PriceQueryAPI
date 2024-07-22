@@ -6,22 +6,15 @@ using Newtonsoft.Json.Linq;
 
 namespace AmegaPriceQuery.Service.Services;
 
-public class BinanceDataSource : IDataSource
+public class BinanceDataSource(
+    IConfiguration configuration,
+    ILogger<BinanceDataSource> logger,
+    ClientWebSocket clientWebSocket)
+    : IDataSource
 {
-    private readonly IConfiguration _configuration;
-    private readonly IPriceUtility _priceUtility;
-    private readonly ILogger<BinanceDataSource> _logger;
     private CancellationTokenSource _cancellationTokenSource;
-    private ClientWebSocket _webSocket;
+    private ClientWebSocket? _webSocket = clientWebSocket;
 
-
-    public BinanceDataSource(IPriceUtility priceUtility, IConfiguration configuration, ILogger<BinanceDataSource> logger, ClientWebSocket clientWebSocket)
-    {
-        _priceUtility = priceUtility;
-        _configuration = configuration;
-        _webSocket = clientWebSocket;
-        _logger = logger;
-    }
 
     public event Action<string>? OnMessageReceived;
 
@@ -31,12 +24,16 @@ public class BinanceDataSource : IDataSource
         {
             _cancellationTokenSource.Cancel();
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
-            _webSocket.Dispose();
-            _logger.LogInformation("Disconnected from Binance WebSocket.");
+            logger.LogInformation("Disconnected from Binance WebSocket.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error disconnecting from Binance WebSocket.");
+            logger.LogError(ex, "Error disconnecting from Binance WebSocket.");
+        }
+        finally
+        {
+            _webSocket?.Dispose();
+            _webSocket = null;
         }
     }
 
@@ -52,12 +49,13 @@ public class BinanceDataSource : IDataSource
 
     public async Task ConnectToSocketAsync()
     {
+        _webSocket ??= new ClientWebSocket();
         if (_webSocket.State == WebSocketState.Open)
         {
             return; // Already connected
         }
         _cancellationTokenSource = new CancellationTokenSource();
-        var url = new Uri(_configuration["WebSocketSettings:BinanceWebSocketUrl"] ??
+        var url = new Uri(configuration["WebSocketSettings:BinanceWebSocketUrl"] ??
                           throw new InvalidOperationException("Binance websocket url is null"));
         try
         {
@@ -86,11 +84,11 @@ public class BinanceDataSource : IDataSource
         {
             await _webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true,
                 CancellationToken.None);
-            _logger.LogInformation("Sent {Action} message for {Instrument} to Binance WebSocket.", action, instrument);
+            logger.LogInformation("Sent {Action} message for {Instrument} to Binance WebSocket.", action, instrument);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error while sending {Action} message for {Instrument}.", action, instrument);
+            logger.LogError(ex, "Error while sending {Action} message for {Instrument}.", action, instrument);
         }
     }
 
@@ -122,7 +120,7 @@ public class BinanceDataSource : IDataSource
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error while receiving message from socket.");
+            logger.LogError(ex, $"Error while receiving message from socket.");
         }
     }
 
@@ -135,7 +133,7 @@ public class BinanceDataSource : IDataSource
             // Check if the message is a subscription response
             if (json["result"] != null && json["id"] != null)
             {
-                _logger.LogInformation("Received subscription response: {Message}", message);
+                logger.LogInformation("Received subscription response: {Message}", message);
             }
             else
             {
@@ -144,7 +142,7 @@ public class BinanceDataSource : IDataSource
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error handling received message: {Message}", message);
+            logger.LogError(ex, "Error handling received message: {Message}", message);
         }
     }
 }
