@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace AmegaPriceQuery.Service.Services;
 
-public class PriceHub(IPriceChannel priceChannel) : Hub
+public class PriceHub(IPriceChannel priceChannel, ILogger<PriceHub> logger) : Hub
 {
+    
     public async Task Subscribe(string instrument)
     {
         var connectionId = Context.ConnectionId;
@@ -18,6 +19,7 @@ public class PriceHub(IPriceChannel priceChannel) : Hub
         await priceChannel.SubscribeAsync(instrument);
 
         await Clients.Caller.SendAsync("Subscribed", instrument);
+        logger.LogInformation("Client {ConnectionId} subscribed to {Instrument}.", connectionId, instrument);
     }
 
     public async Task Unsubscribe(string instrument)
@@ -31,6 +33,7 @@ public class PriceHub(IPriceChannel priceChannel) : Hub
         await priceChannel.UnsubscribeAsync(instrument);
 
         await Clients.Caller.SendAsync("Unsubscribed", instrument);
+        logger.LogInformation("Client {ConnectionId} unsubscribed from {Instrument}.", connectionId, instrument);
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
@@ -44,11 +47,12 @@ public class PriceHub(IPriceChannel priceChannel) : Hub
         }
 
         await base.OnDisconnectedAsync(exception);
+        logger.LogInformation("Client {ConnectionId} disconnected.", connectionId);
     }
 
-    // Method to broadcast price updates to subscribed clients
     public static async Task BroadcastPrice(IHubContext<PriceHub> hubContext, string instrument, WebSocketResponse response)
     {
+        // Broadcast price updates to subscribed clients
         await hubContext.Clients.Group(instrument).SendAsync("ReceivePrice", response);
     }
 }

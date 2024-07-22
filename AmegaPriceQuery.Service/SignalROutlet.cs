@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace AmegaPriceQuery.Service;
 
-
 public class SignalRWebSocketHandler : ISocketOutlet
 {
     private readonly IHubContext<PriceHub> _hubContext;
@@ -25,8 +24,6 @@ public class SignalRWebSocketHandler : ISocketOutlet
         _priceChannel.BroadcastPriceEvent += OnPriceReceived;
     }
 
-    
-
     private async void OnPriceReceived(string instrument, decimal inputPrice)
     {
         try
@@ -34,15 +31,14 @@ public class SignalRWebSocketHandler : ISocketOutlet
             var price = await _utility.GetPrice(instrument);
             if (price != null)
             {
-                var response = new WebSocketResponse(new { instrument, price }, 
-                    "Retrieved", ResponseCode.Successful);
+                var response = new WebSocketResponse(new { instrument, price }, "Retrieved", ResponseCode.Successful);
                 await PriceHub.BroadcastPrice(_hubContext, instrument, response);
+                _logger.LogInformation("Broadcasted price update for {Instrument}: {Price}.", instrument, price);
             }
             else
             {
                 _logger.LogError("Instrument {Instrument} not found", instrument);
-                var response = new WebSocketResponse(null, 
-                    $"Price for {instrument} not found, please try again later", ResponseCode.Failed);
+                var response = new WebSocketResponse(null, $"Price for {instrument} not found, please try again later", ResponseCode.Failed);
                 await PriceHub.BroadcastPrice(_hubContext, instrument, response);
             }
         }
@@ -51,10 +47,8 @@ public class SignalRWebSocketHandler : ISocketOutlet
             _logger.LogError(ex, "Error broadcasting price update to SignalR Hub.");
         }
     }
-    
-    
-    
-    //SignalR already handles these methods
+
+    // SignalR already handles these methods
     public Task Subscribe(string instrument)
     {
         throw new NotImplementedException();
@@ -65,18 +59,19 @@ public class SignalRWebSocketHandler : ISocketOutlet
         throw new NotImplementedException();
     }
 
-    public Task Connect(string instrument)
+    public Task Connect()
     {
         throw new NotImplementedException();
     }
 
-    public Task Disconnect(string instrument)
+    public Task Disconnect()
     {
         throw new NotImplementedException();
     }
 
-    public void MapEndpoint(WebApplication  app)
+    public void MapEndpoint(WebApplication app)
     {
         app.MapHub<PriceHub>("/signalrhub");
+        _logger.LogInformation("Mapped SignalR hub endpoint at /signalrhub.");
     }
 }

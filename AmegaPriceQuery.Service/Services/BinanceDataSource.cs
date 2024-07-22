@@ -15,14 +15,15 @@ public class BinanceDataSource(
     private CancellationTokenSource _cancellationTokenSource;
     private ClientWebSocket? _webSocket = clientWebSocket;
 
-
     public event Action<string>? OnMessageReceived;
 
     public async Task DisconnectFromSocketAsync()
     {
         try
         {
-            _cancellationTokenSource.Cancel();
+            // Cancel the current operations
+            await _cancellationTokenSource.CancelAsync();
+            // Close the WebSocket connection
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
             logger.LogInformation("Disconnected from Binance WebSocket.");
         }
@@ -52,6 +53,7 @@ public class BinanceDataSource(
         _webSocket ??= new ClientWebSocket();
         if (_webSocket.State == WebSocketState.Open)
         {
+            logger.LogInformation("WebSocket already connected.");
             return; // Already connected
         }
         _cancellationTokenSource = new CancellationTokenSource();
@@ -59,11 +61,13 @@ public class BinanceDataSource(
                           throw new InvalidOperationException("Binance websocket url is null"));
         try
         {
+            // Connect to the WebSocket
             await _webSocket.ConnectAsync(url, _cancellationTokenSource.Token);
+            logger.LogInformation("Connected to Binance WebSocket.");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            logger.LogError(e, "Error connecting to Binance WebSocket.");
             throw;
         }
     }
@@ -82,6 +86,7 @@ public class BinanceDataSource(
 
         try
         {
+            // Send subscription message to the WebSocket
             await _webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true,
                 CancellationToken.None);
             logger.LogInformation("Sent {Action} message for {Instrument} to Binance WebSocket.", action, instrument);
@@ -97,6 +102,7 @@ public class BinanceDataSource(
         var buffer = new byte[1024 * 4];
         try
         {
+            // Receive messages from the WebSocket
             while (_webSocket.State == WebSocketState.Open && !cancellationToken.IsCancellationRequested)
             {
                 var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
@@ -137,6 +143,7 @@ public class BinanceDataSource(
             }
             else
             {
+                // Trigger the event for the received message
                 OnMessageReceived?.Invoke(message);
             }
         }

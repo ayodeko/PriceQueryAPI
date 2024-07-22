@@ -16,6 +16,7 @@ public class PriceUtility(ILogger<PriceUtility> logger) : IPriceUtility
 
     public async Task<decimal?> GetPrice(string instrument)
     {
+        // Try to get the price for the given instrument
         if (_prices.TryGetValue(instrument, out var price))
         {
             return price;
@@ -35,6 +36,7 @@ public class PriceUtility(ILogger<PriceUtility> logger) : IPriceUtility
             throw new ArgumentException("Price cannot be negative.", nameof(price));
         }
 
+        // Update the price for the instrument
         _prices[instrument] = price;
         _logger.LogInformation("Updated price for instrument {Instrument}: {Price}", instrument, price);
     }
