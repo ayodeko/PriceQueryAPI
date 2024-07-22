@@ -24,6 +24,36 @@ public class RequestHandler(IPriceChannel channel, IPriceUtility utility, ILogge
             return response;
         }
     }
+
+    public async Task<Tuple<string, WebSocketResponse>> GetPriceWebSocket(string instrument)
+    {
+        
+        try
+        {
+            var price = await utility.GetPrice(instrument);
+            if (price != null)
+            {
+                
+                var response = new WebSocketResponse(new { instrument, price }, 
+                    "Retrieved", ResponseCode.Successful);
+                return new Tuple<string, WebSocketResponse>(instrument, response);
+            }
+            else
+            {
+                await channel.SubscribeAsync(instrument);
+                logger.LogError("Instrument {Instrument} not found", instrument);
+                var response = new WebSocketResponse(null, 
+                    $"Price for {instrument} not found, please try again later", ResponseCode.Failed);
+                return new Tuple<string, WebSocketResponse>(instrument, response);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error encountered while getting price");
+            throw;
+        }
+    }
+
     public async Task<RestResponse> GetPriceRest(string instrument)
     {
         try

@@ -3,17 +3,11 @@ using AmegaPriceQuery.Core.Interfaces;
 
 namespace AmegaPriceQuery.Service.Services;
 
-public class PriceUtility : IPriceUtility
+public class PriceUtility(ILogger<PriceUtility> logger) : IPriceUtility
 {
-    private readonly ILogger<PriceUtility> _logger;
-    private readonly ConcurrentDictionary<string, decimal> _prices;
+    private readonly ILogger<PriceUtility> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly ConcurrentDictionary<string, decimal> _prices = new();
 
-    public PriceUtility(ILogger<PriceUtility> logger)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _prices = new ConcurrentDictionary<string, decimal>();
-    }
-    
     public Task<List<string>> GetInstruments()
     {
         var instruments = new List<string> { "BTCUSD", "ETHUSD", "EURUSD" };
