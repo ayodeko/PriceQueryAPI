@@ -1,21 +1,12 @@
-using System.Net.WebSockets;
-using AmegaPriceQuery.Core.Interfaces;
-using AmegaPriceQuery.Service.Services;
-using Microsoft.AspNetCore.Mvc;
+using AmegaPriceQuery.API;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configure logging to use the console
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IPriceChannel, SubscriptionManager>();
-builder.Services.AddSingleton<IDataSource, BinanceDataSource>();
-builder.Services.AddSingleton<IPriceUtility, PriceUtility>();
-builder.Services.AddScoped<IRequestHandler, RequestHandler>();
-builder.Services.AddSingleton<ClientWebSocket>();
+
+//Inject all Services
+builder.InjectServices();
 
 var app = builder.Build();
 
@@ -26,10 +17,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("api/GetInstruments", ([FromServices] IRequestHandler handler)
-    => handler.GetInstrumentsRest());
-
-app.MapGet("api/GetPrice", ([FromServices] IRequestHandler handler, string instrument)
-    => handler.GetPriceRest(instrument));
+//Create Rest and WebSocket Endpoints
+app.BuildEndpoints();
 
 app.Run();
