@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmegaPriceQuery.Core", "Ame
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmegaPriceQuery.Service", "AmegaPriceQuery.Service\AmegaPriceQuery.Service.csproj", "{FB6AA694-54B2-494C-9E1B-6BB5729E2129}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmegaPriceQuery.Tests", "AmegaPriceQuery.Tests\AmegaPriceQuery.Tests.csproj", "{022EC71D-662E-41EA-A29D-CCE9A5271729}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{FB6AA694-54B2-494C-9E1B-6BB5729E2129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB6AA694-54B2-494C-9E1B-6BB5729E2129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB6AA694-54B2-494C-9E1B-6BB5729E2129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{022EC71D-662E-41EA-A29D-CCE9A5271729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{022EC71D-662E-41EA-A29D-CCE9A5271729}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{022EC71D-662E-41EA-A29D-CCE9A5271729}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{022EC71D-662E-41EA-A29D-CCE9A5271729}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
