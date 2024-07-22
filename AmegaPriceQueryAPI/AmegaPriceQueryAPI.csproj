@@ -13,4 +13,9 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\AmegaPriceQuery.Core\AmegaPriceQuery.Core.csproj" />
+      <ProjectReference Include="..\AmegaPriceQuery.Service\AmegaPriceQuery.Service.csproj" />
+    </ItemGroup>
+
 </Project>
