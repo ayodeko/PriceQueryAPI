@@ -1,9 +1,8 @@
 ﻿using AmegaPriceQuery.Core;
 using AmegaPriceQuery.Core.Interfaces;
-using AmegaPriceQuery.Service.Services;
 using Microsoft.AspNetCore.SignalR;
 
-namespace AmegaPriceQuery.Service;
+namespace AmegaPriceQuery.Service.Services;
 
 public class SignalRWebSocketHandler : ISocketOutlet
 {
