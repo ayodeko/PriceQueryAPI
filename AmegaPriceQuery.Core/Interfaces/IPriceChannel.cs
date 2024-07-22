@@ -2,7 +2,7 @@
 
 public interface IPriceChannel
 {
-    Task Subscribe(string instrument);
-    Task Unsubscribe(string instrument);
-    Task BroadcastPrice(string instrument, decimal price);
+    Task SubscribeAsync(string instrument);
+    Task UnsubscribeAsync(string instrument);
+    void BroadcastPrice(string message);
 }
