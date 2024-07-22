@@ -13,7 +13,9 @@ and expose the prices to clients through WebSockets and REST APIs.
   - [Clone the Repository](#clone-the-repository)
   - [Setting Up the Project](#setting-up-the-project)
   - [Running the Project](#running-the-project)
+  - [Connect to the SignalR WebSocket using Postman](#connect-to-the-signalr-websocket-using-postman)
   - [Running Unit Tests](#running-unit-tests)
+- [Management of WebSocket over 1000 Subscribers](#management-of-websocket-over-1000-subscribers)
 - [Contact](#contact)
 
 ## Project Specifications
@@ -101,7 +103,34 @@ To connect to the WebSocket using Postman, follow the steps outlined in the [Web
    ```
    This will execute all unit tests and display the results in the terminal.
 
-## Contact ✉️
+## Management of WebSocket over 1000 Subscribers
+
+The system is designed to efficiently manage over 1,000 WebSocket subscribers using the following strategies:
+
+1. **Concurrent Subscription Management**:
+    - The `SubscriptionManager` class uses a `ConcurrentDictionary` to manage subscriptions, ensuring thread-safe operations.
+
+2. **Single WebSocket Connection**:
+    - Maintains a single connection to the data provider in `SubscriptionManager`.
+
+3. **Event-Driven Broadcasting**:
+    - The `BroadcastPrice` method in `SubscriptionManager` uses events to efficiently notify all subscribers of price updates.
+
+4. **Background Message Processing**:
+    - Messages from the data provider are processed in the background by `SubscriptionManager`.
+
+### Scaling with SignalR and Redis
+
+SignalR is chosen for WebSocket communication due to its scalability features. It can be easily integrated with Redis for horizontal scaling to support millions of users.
+
+- **Redis Backplane**:
+    - Using Redis with SignalR allows messages to be distributed across multiple servers, ensuring all clients receive updates.
+
+Refer to the code comments in `SubscriptionManager.cs` for more details.
+
+
+## Contact   
+✉️
 
 For any questions or inquiries, please reach out to the project maintainer at [akindekoayooluwa@gmail.com](mailto:akindekoayooluwa@gmail.com).
 
