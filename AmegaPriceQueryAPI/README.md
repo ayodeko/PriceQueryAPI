@@ -1,7 +1,8 @@
 
 # AmegaPriceQueryAPI
 
-A .NET 8 application for querying cryptocurrency prices using Binance WebSocket and REST APIs, with a robust architecture and modern design patterns.
+A .NET 8 application for querying FX and Crypto prices from WebSocket Server
+and expose the prices to clients through WebSockets and REST APIs.
 
 ## Table of Contents
 - [Project Specifications](#project-specifications)
@@ -18,8 +19,6 @@ A .NET 8 application for querying cryptocurrency prices using Binance WebSocket 
 ## Project Specifications
 
 - **.NET Version**: .NET 8
-- **Primary Functionality**: Querying FX and Crypto prices from WebSocket Server
-and expose the prices to clients through WebSockets and REST APIs.
 - **Core Features**:
   - Real-time price updates via WebSocket
   - REST API for fetching instruments and prices
