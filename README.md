@@ -1,5 +1,5 @@
 
-# AmegaPriceQueryAPI
+# PriceQueryAPI
 
 A .NET 8 application for querying FX and Crypto prices from WebSocket Server
 and expose the prices to clients through WebSockets and REST APIs.
@@ -33,11 +33,11 @@ and expose the prices to clients through WebSockets and REST APIs.
 2. Navigate to the directory where you want to clone the project.
 3. Run the following command to clone the repository:
    ```
-   git clone https://github.com/ayodeko/AmegaPriceQueryAPI.git
+   git clone https://github.com/ayodeko/PriceQueryAPI.git
    ```
 4. Navigate into the project directory:
    ```
-   cd AmegaPriceQueryAPI
+   cd PriceQueryAPI
    ```
 
 ### Setting Up the Project
@@ -62,7 +62,7 @@ and expose the prices to clients through WebSockets and REST APIs.
 
 1. **Run the project**:
    ```
-   dotnet run --project AmegaPriceQuery.API
+   dotnet run --project PriceQuery.API
    ```
    This will start the web server. You should see output indicating that the application is running and listening on a port.
 
@@ -71,7 +71,7 @@ and expose the prices to clients through WebSockets and REST APIs.
 
 ### Connect to the SignalR WebSocket using Postman
 
-To connect to the WebSocket using Postman, follow the steps outlined in the [WebSocketWithPostman.md](AmegaPriceQueryAPI/CodeDocumentation/WebSocketWithPostman.md) guide.
+To connect to the WebSocket using Postman, follow the steps outlined in the [WebSocketWithPostman.md](PriceQueryAPI/CodeDocumentation/WebSocketWithPostman.md) guide.
 
 ### Running Unit Tests
 
