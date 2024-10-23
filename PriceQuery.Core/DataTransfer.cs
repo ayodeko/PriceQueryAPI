@@ -1,4 +1,4 @@
-﻿namespace AmegaPriceQuery.Core;
+﻿namespace PriceQuery.Core;
 
 public enum ResponseCode
 {

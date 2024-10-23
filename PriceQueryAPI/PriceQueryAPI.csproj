@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AmegaPriceQuery.Core\AmegaPriceQuery.Core.csproj" />
-      <ProjectReference Include="..\AmegaPriceQuery.Service\AmegaPriceQuery.Service.csproj" />
+      <ProjectReference Include="..\PriceQuery.Core\PriceQuery.Core.csproj" />
+      <ProjectReference Include="..\PriceQuery.Service\PriceQuery.Service.csproj" />
     </ItemGroup>
 
 </Project>

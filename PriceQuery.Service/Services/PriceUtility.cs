@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
-using AmegaPriceQuery.Core.Interfaces;
+using PriceQuery.Core.Interfaces;
 
-namespace AmegaPriceQuery.Service.Services;
+namespace PriceQuery.Service.Services;
 
 public class PriceUtility(ILogger<PriceUtility> logger) : IPriceUtility
 {

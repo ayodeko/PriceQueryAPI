@@ -1,7 +1,7 @@
-﻿namespace AmegaPriceQuery.Tests;
+﻿namespace PriceQuery.Tests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AmegaPriceQuery.Service.Services;
+using PriceQuery.Service.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

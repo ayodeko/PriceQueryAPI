@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace AmegaPriceQuery.Core.Interfaces;
+namespace PriceQuery.Core.Interfaces;
 
 /// <summary>
 /// Interface for price channel operations.

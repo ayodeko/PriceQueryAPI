@@ -1,4 +1,4 @@
-using AmegaPriceQuery.API;
+using PriceQuery.API;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configure logging to use the console

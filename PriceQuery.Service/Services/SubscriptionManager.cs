@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
-using AmegaPriceQuery.Core.Interfaces;
+using PriceQuery.Core.Interfaces;
 using Newtonsoft.Json.Linq;
 
-namespace AmegaPriceQuery.Service.Services;
+namespace PriceQuery.Service.Services;
 
 public class SubscriptionManager : IPriceChannel
 {

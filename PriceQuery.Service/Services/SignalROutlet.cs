@@ -1,8 +1,8 @@
-﻿using AmegaPriceQuery.Core;
-using AmegaPriceQuery.Core.Interfaces;
+﻿using PriceQuery.Core;
+using PriceQuery.Core.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
-namespace AmegaPriceQuery.Service.Services;
+namespace PriceQuery.Service.Services;
 
 public class SignalRWebSocketHandler : ISocketOutlet
 {

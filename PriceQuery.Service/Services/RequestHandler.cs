@@ -1,7 +1,7 @@
-﻿using AmegaPriceQuery.Core;
-using AmegaPriceQuery.Core.Interfaces;
+﻿using PriceQuery.Core;
+using PriceQuery.Core.Interfaces;
 
-namespace AmegaPriceQuery.Service.Services;
+namespace PriceQuery.Service.Services;
 
 public class RequestHandler(IPriceChannel channel, IPriceUtility utility, ILogger<RequestHandler> logger)
     : IRequestHandler

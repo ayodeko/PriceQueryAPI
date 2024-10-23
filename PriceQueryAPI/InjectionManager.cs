@@ -1,9 +1,9 @@
 ﻿using System.Net.WebSockets;
-using AmegaPriceQuery.Core.Interfaces;
-using AmegaPriceQuery.Service;
-using AmegaPriceQuery.Service.Services;
+using PriceQuery.Core.Interfaces;
+using PriceQuery.Service;
+using PriceQuery.Service.Services;
 
-namespace AmegaPriceQuery.API;
+namespace PriceQuery.API;
 
 public static class InjectionManager
 {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
-using AmegaPriceQuery.Core;
-using AmegaPriceQuery.Core.Interfaces;
+using PriceQuery.Core;
+using PriceQuery.Core.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
-namespace AmegaPriceQuery.Service.Services;
+namespace PriceQuery.Service.Services;
 
 public class PriceHub(IPriceChannel priceChannel, ILogger<PriceHub> logger) : Hub
 {

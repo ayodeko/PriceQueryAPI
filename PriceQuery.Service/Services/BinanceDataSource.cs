@@ -1,10 +1,10 @@
 ﻿using System.Net.WebSockets;
 using System.Text;
-using AmegaPriceQuery.Core.Interfaces;
+using PriceQuery.Core.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace AmegaPriceQuery.Service.Services;
+namespace PriceQuery.Service.Services;
 
 public class BinanceDataSource(
     IConfiguration configuration,

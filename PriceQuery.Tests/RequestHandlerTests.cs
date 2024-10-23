@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AmegaPriceQuery.Core;
-using AmegaPriceQuery.Core.Interfaces;
-using AmegaPriceQuery.Service.Services;
+using PriceQuery.Core;
+using PriceQuery.Core.Interfaces;
+using PriceQuery.Service.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;

@@ -1,4 +1,4 @@
-﻿namespace AmegaPriceQuery.Core.Interfaces;
+﻿namespace PriceQuery.Core.Interfaces;
 
 /// <summary>
 /// Interface for data source communication.

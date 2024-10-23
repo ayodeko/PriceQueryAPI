@@ -1,7 +1,7 @@
-﻿using AmegaPriceQuery.Core.Interfaces;
+﻿using PriceQuery.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AmegaPriceQuery.API;
+namespace PriceQuery.API;
 
 public static class Endpoints
 {
